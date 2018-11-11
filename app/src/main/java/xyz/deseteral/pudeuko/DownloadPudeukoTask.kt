@@ -6,12 +6,11 @@ import com.dropbox.core.v2.DbxClientV2
 import java.io.ByteArrayOutputStream
 import java.util.ArrayList
 
-internal class GetPudeukoTask(
+internal class DownloadPudeukoTask(
     private val dbxClient: DbxClientV2,
     private val callback: Callback
 ) : AsyncTask<Unit, Unit, ArrayList<PudeukoObject>>() {
 
-    private val PUDEUKO_DBX_FILE_PATH = "pudeuko/data.json"
     private var exception: Exception? = null
 
     interface Callback {
@@ -30,12 +29,15 @@ internal class GetPudeukoTask(
     }
 
     override fun doInBackground(vararg params: Unit?): ArrayList<PudeukoObject> {
+        if (android.os.Debug.isDebuggerConnected())
+            android.os.Debug.waitForDebugger()
+
         try {
             val outputStream = ByteArrayOutputStream()
-            dbxClient.files().download(PUDEUKO_DBX_FILE_PATH).download(outputStream)
+            dbxClient.files().download(PudeukoService.DBX_FILE_PATH).download(outputStream)
             val json = outputStream.toString()
 
-            return Klaxon().parse(json)!!
+            return Klaxon().parseArray<PudeukoObject>(json) as ArrayList<PudeukoObject>
         } catch (exception: Exception) {
             this.exception = exception
         }
