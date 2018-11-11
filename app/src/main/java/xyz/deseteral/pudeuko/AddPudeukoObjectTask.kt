@@ -37,14 +37,14 @@ internal class AddPudeukoObjectTask(
             override fun onComplete(result: ArrayList<PudeukoObject>) {
                 result.add(0, pudeukoObject!!)
 
-                val json = Klaxon().toJsonString(result)
-
                 try {
+                    val json = Klaxon().toJsonString(result)
+
                     dbxClient.files().uploadBuilder(PUDEUKO_DBX_FILE_PATH)
                         .withMode(WriteMode.OVERWRITE)
                         .uploadAndFinish(json.byteInputStream())
                 } catch (exception: Exception) {
-                    this.
+                    this@AddPudeukoObjectTask.exception = exception
                 }
             }
         })
