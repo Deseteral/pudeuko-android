@@ -3,6 +3,7 @@ package xyz.deseteral.pudeuko
 import android.os.AsyncTask
 import com.beust.klaxon.Klaxon
 import com.dropbox.core.v2.DbxClientV2
+import xyz.deseteral.pudeuko.domain.PudeukoObject
 import java.io.ByteArrayOutputStream
 import java.util.ArrayList
 

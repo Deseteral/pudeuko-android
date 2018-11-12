@@ -4,9 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
-import com.dropbox.core.DbxRequestConfig
-import com.dropbox.core.v2.DbxClientV2
+import xyz.deseteral.pudeuko.domain.Link
+import xyz.deseteral.pudeuko.domain.PudeukoObject
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,7 +39,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun debugAdd(v: View) {
-        val pudeukoObject = PudeukoObject("test", Link("https://allegro.pl"), null, currentDateIso())
+        val pudeukoObject = PudeukoObject(
+            "test",
+            Link("https://allegro.pl"), null, currentDateIso()
+        )
         PudeukoService().addObjectToPudeuko(pudeukoObject, applicationContext)
     }
 }

@@ -4,6 +4,7 @@ import android.os.AsyncTask
 import com.beust.klaxon.Klaxon
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
+import xyz.deseteral.pudeuko.domain.PudeukoObject
 
 internal class UploadPudeukoObjectTask(
     private val dbxClient: DbxClientV2,
