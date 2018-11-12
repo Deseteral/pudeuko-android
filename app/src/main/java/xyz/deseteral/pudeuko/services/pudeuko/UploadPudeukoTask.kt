@@ -1,4 +1,4 @@
-package xyz.deseteral.pudeuko
+package xyz.deseteral.pudeuko.services.pudeuko
 
 import android.os.AsyncTask
 import com.beust.klaxon.Klaxon
@@ -6,7 +6,7 @@ import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.WriteMode
 import xyz.deseteral.pudeuko.domain.PudeukoObject
 
-internal class UploadPudeukoObjectTask(
+internal class UploadPudeukoTask(
     private val dbxClient: DbxClientV2,
     private val callback: Callback
 ) : AsyncTask<List<PudeukoObject>, Unit, Unit>() {

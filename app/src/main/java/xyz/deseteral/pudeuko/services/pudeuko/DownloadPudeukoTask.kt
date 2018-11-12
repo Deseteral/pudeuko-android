@@ -1,4 +1,4 @@
-package xyz.deseteral.pudeuko
+package xyz.deseteral.pudeuko.services.pudeuko
 
 import android.os.AsyncTask
 import com.beust.klaxon.Klaxon

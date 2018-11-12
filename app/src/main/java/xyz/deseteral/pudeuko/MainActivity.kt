@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import xyz.deseteral.pudeuko.domain.Link
 import xyz.deseteral.pudeuko.domain.PudeukoObject
+import xyz.deseteral.pudeuko.services.pudeuko.PudeukoService
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun currentDateIso(): String {
         val tz = TimeZone.getTimeZone("UTC")
-        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'", Locale.US)
+        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
         df.timeZone = tz
         return df.format(Date())
     }
@@ -29,7 +30,8 @@ class MainActivity : AppCompatActivity() {
                             it, Link(it), null, currentDateIso()
                         )
 
-                        PudeukoService().addObjectToPudeuko(pudeukoObject, applicationContext)
+                        PudeukoService()
+                            .addObjectToPudeuko(pudeukoObject, applicationContext)
                     }
                 }
             }
