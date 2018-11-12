@@ -1,6 +1,7 @@
 package xyz.deseteral.pudeuko
 
 import android.content.Context
+import android.widget.Toast
 import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.v2.DbxClientV2
 import java.util.ArrayList
@@ -21,17 +22,17 @@ class PudeukoService {
 
                 UploadPudeukoObjectTask(client, object : UploadPudeukoObjectTask.Callback {
                     override fun onComplete() {
-
+                        Toast.makeText(context, "Added to pudeuko!", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onError(e: Exception) {
-
+                        Toast.makeText(context, "Upload to pudeuko failed!", Toast.LENGTH_SHORT).show()
                     }
                 }).execute(result)
             }
 
             override fun onError(e: Exception) {
-
+                Toast.makeText(context, "Fetching data from pudeuko failed!", Toast.LENGTH_SHORT).show()
             }
         }).execute()
     }
