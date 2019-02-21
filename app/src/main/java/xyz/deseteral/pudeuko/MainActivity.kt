@@ -41,12 +41,4 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
     }
-
-    fun debugAdd(v: View) {
-        val pudeukoObject = PudeukoObject(
-            "test",
-            Link("https://allegro.pl"), null, currentDateIso()
-        )
-        PudeukoService().addObjectToPudeuko(pudeukoObject, applicationContext)
-    }
 }
