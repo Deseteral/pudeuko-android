@@ -2,14 +2,9 @@ package xyz.deseteral.pudeuko.services.pudeuko
 
 import android.os.AsyncTask
 import com.beust.klaxon.Klaxon
-import com.dropbox.core.v2.DbxClientV2
-import com.dropbox.core.v2.files.WriteMode
-import xyz.deseteral.pudeuko.domain.PudeukoObject
+import xyz.deseteral.pudeuko.domain.ContentDTO
 
-internal class UploadPudeukoTask(
-    private val dbxClient: DbxClientV2,
-    private val callback: Callback
-) : AsyncTask<List<PudeukoObject>, Unit, Unit>() {
+internal class UploadPudeukoTask(private val callback: Callback) : AsyncTask<ContentDTO, Unit, Unit>() {
 
     private var exception: Exception? = null
 
@@ -28,16 +23,14 @@ internal class UploadPudeukoTask(
         }
     }
 
-    override fun doInBackground(vararg params: List<PudeukoObject>?) {
+    override fun doInBackground(vararg params: ContentDTO?) {
         if (android.os.Debug.isDebuggerConnected())
             android.os.Debug.waitForDebugger()
 
         try {
             val json = Klaxon().toJsonString(params[0]!!)
 
-            dbxClient.files().uploadBuilder(PudeukoService.DBX_FILE_PATH)
-                .withMode(WriteMode.OVERWRITE)
-                .uploadAndFinish(json.byteInputStream())
+            // TODO: HTTP POST to pudeuko-service here
         } catch (exception: Exception) {
             this.exception = exception
         }
