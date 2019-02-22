@@ -2,44 +2,22 @@ package xyz.deseteral.pudeuko.services.pudeuko
 
 import android.content.Context
 import android.widget.Toast
-import com.dropbox.core.DbxRequestConfig
-import com.dropbox.core.v2.DbxClientV2
-import xyz.deseteral.pudeuko.R
-import xyz.deseteral.pudeuko.domain.PudeukoObject
-import java.util.ArrayList
+import xyz.deseteral.pudeuko.clients.buildPudeukoClient
+import xyz.deseteral.pudeuko.domain.ContentDTO
 
 class PudeukoService {
-    companion object {
-        const val DBX_FILE_PATH = "/pudeuko/data.json"
-    }
+    fun addObjectToPudeuko(content: String, context: Context) {
+        val contentDTO = ContentDTO(content)
+        val pudeukoClient = buildPudeukoClient(context)
 
-    fun addObjectToPudeuko(pudeukoObject: PudeukoObject, context: Context) {
-        val accessToken = context.getString(R.string.dropbox_access_token)
-        val requestConfig = DbxRequestConfig.newBuilder("pudeuko").build()
-        val client = DbxClientV2(requestConfig, accessToken)
+        UploadPudeukoTask(pudeukoClient, object : UploadPudeukoTask.Callback {
+            override fun onComplete() {
+                Toast.makeText(context, "Added to pudeuko!", Toast.LENGTH_SHORT).show()
+            }
 
-        DownloadPudeukoTask(
-            client,
-            object : DownloadPudeukoTask.Callback {
-                override fun onComplete(result: ArrayList<PudeukoObject>) {
-                    result.add(0, pudeukoObject)
-
-                    UploadPudeukoTask(
-                        client,
-                        object : UploadPudeukoTask.Callback {
-                            override fun onComplete() {
-                                Toast.makeText(context, "Added to pudeuko!", Toast.LENGTH_SHORT).show()
-                            }
-
-                            override fun onError(e: Exception) {
-                                Toast.makeText(context, "Upload to pudeuko failed!", Toast.LENGTH_SHORT).show()
-                            }
-                        }).execute(result)
-                }
-
-                override fun onError(e: Exception) {
-                    Toast.makeText(context, "Fetching data from pudeuko failed!", Toast.LENGTH_SHORT).show()
-                }
-            }).execute()
+            override fun onError() {
+                Toast.makeText(context, "Upload to pudeuko failed!", Toast.LENGTH_SHORT).show()
+            }
+        }).execute(contentDTO)
     }
 }

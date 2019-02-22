@@ -1,45 +1,38 @@
 package xyz.deseteral.pudeuko.services.pudeuko
 
 import android.os.AsyncTask
-import com.beust.klaxon.Klaxon
-import com.dropbox.core.v2.DbxClientV2
-import com.dropbox.core.v2.files.WriteMode
-import xyz.deseteral.pudeuko.domain.PudeukoObject
+import xyz.deseteral.pudeuko.clients.PudeukoClient
+import xyz.deseteral.pudeuko.domain.ContentDTO
 
 internal class UploadPudeukoTask(
-    private val dbxClient: DbxClientV2,
+    private val pudeukoClient: PudeukoClient,
     private val callback: Callback
-) : AsyncTask<List<PudeukoObject>, Unit, Unit>() {
+) : AsyncTask<ContentDTO, Unit, Unit>() {
 
-    private var exception: Exception? = null
+    private var success: Boolean = true
 
     interface Callback {
         fun onComplete()
-        fun onError(e: Exception)
+        fun onError()
     }
 
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
 
-        if (exception != null) {
-            callback.onError(exception!!)
-        } else {
+        if (success) {
             callback.onComplete()
+        } else {
+            callback.onError()
         }
     }
 
-    override fun doInBackground(vararg params: List<PudeukoObject>?) {
-        if (android.os.Debug.isDebuggerConnected())
-            android.os.Debug.waitForDebugger()
-
+    override fun doInBackground(vararg params: ContentDTO?) {
         try {
-            val json = Klaxon().toJsonString(params[0]!!)
-
-            dbxClient.files().uploadBuilder(PudeukoService.DBX_FILE_PATH)
-                .withMode(WriteMode.OVERWRITE)
-                .uploadAndFinish(json.byteInputStream())
+            val content = params[0]!!
+            val response = pudeukoClient.postItem(content).execute()
+            this.success = response.isSuccessful
         } catch (exception: Exception) {
-            this.exception = exception
+            this.success = false
         }
     }
 }
