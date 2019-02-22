@@ -9,28 +9,30 @@ internal class UploadPudeukoTask(
     private val callback: Callback
 ) : AsyncTask<ContentDTO, Unit, Unit>() {
 
-    private var exception: Exception? = null
+    private var success: Boolean = true
 
     interface Callback {
         fun onComplete()
-        fun onError(e: Exception)
+        fun onError()
     }
 
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
 
-        if (exception != null) {
-            callback.onError(exception!!)
-        } else {
+        if (success) {
             callback.onComplete()
+        } else {
+            callback.onError()
         }
     }
 
     override fun doInBackground(vararg params: ContentDTO?) {
         try {
-            val response = pudeukoClient.postItem(params[0]!!).execute()
+            val content = params[0]!!
+            val response = pudeukoClient.postItem(content).execute()
+            this.success = response.isSuccessful
         } catch (exception: Exception) {
-            this.exception = exception
+            this.success = false
         }
     }
 }

@@ -15,7 +15,7 @@ class PudeukoService {
                 Toast.makeText(context, "Added to pudeuko!", Toast.LENGTH_SHORT).show()
             }
 
-            override fun onError(e: Exception) {
+            override fun onError() {
                 Toast.makeText(context, "Upload to pudeuko failed!", Toast.LENGTH_SHORT).show()
             }
         }).execute(contentDTO)
